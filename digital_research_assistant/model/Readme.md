@@ -44,6 +44,7 @@ Before you can use the scripts in this repository, you need to set up your AWS e
 3. You will be prompted to enter your AWS Access Key ID, AWS Secret Access Key, default region name, and default output format. Enter the information you obtained when creating the IAM user.
 
 Example:
+
 ```
 AWS Access Key ID [None]: <your access key ID>
 AWS Secret Access Key [None]: <your secret access key>
@@ -60,33 +61,37 @@ Now your AWS environment is set up and ready to use with the scripts in this rep
 
 ## SageMaker User Creation Script
 
-File: `llm_engineering/core/aws/create_sagemaker_role.py`
+File: `digital_research_assistant/core/aws/create_sagemaker_role.py`
 
 This script creates an IAM user with permissions to interact with SageMaker and other necessary AWS services.
 
 ### Features:
+
 - Creates a new IAM user
 - Attaches policies for full access to SageMaker, CloudFormation, IAM, ECR, and S3
 - Generates and outputs access keys for programmatic access
 - Saves the access keys to a JSON file
 
 ### Usage:
+
 ```
 make create-sagemaker-role
 ```
 
 ## SageMaker Execution Role Creation Script
 
-File: `llm_engineering/core/aws/create_sagemaker_execution_role.py`
+File: `digital_research_assistant/core/aws/create_sagemaker_execution_role.py`
 
 This script creates an IAM role that SageMaker can assume to access other AWS resources on your behalf.
 
 ### Features:
+
 - Creates a new IAM role with a trust relationship allowing SageMaker to assume the role
 - Attaches policies for SageMaker, S3, CloudWatch Logs, and ECR access
 - Outputs and saves the role ARN to a JSON file
 
 ### Usage:
+
 ```
 make create-sagemaker-execution-role
 ```
@@ -94,16 +99,19 @@ make create-sagemaker-execution-role
 ## Understanding the Difference
 
 ### SageMaker User Role
+
 - Purpose: For human users or applications to access AWS services
 - Authentication: Uses access keys for authentication
 - Usage: Used in scripts or applications that manage SageMaker resources
 
 ### SageMaker Execution Role
+
 - Purpose: For SageMaker to access other AWS resources on your behalf
 - Authentication: Uses temporary credentials via AssumeRole
 - Usage: Provided to SageMaker when creating notebooks, training jobs, or deploying models
 
 ### Key Differences
+
 1. **Purpose**: User roles are for external access to AWS. Execution roles are for internal AWS service-to-service access.
 2. **Authentication**: User roles use long-term access keys. Execution roles use short-term credentials.
 3. **Trust Relationship**: Execution roles have a trust relationship with the SageMaker service.
@@ -113,25 +121,28 @@ make create-sagemaker-execution-role
 
 After setting up the necessary AWS resources (user and execution role), you can deploy a Hugging Face model as a SageMaker inference endpoint.
 
-File: `llm_engineering/model/deploy/huggingface/run.py`
+File: `digital_research_assistant/model/deploy/huggingface/run.py`
 
 This script creates a SageMaker endpoint for inference using a Hugging Face model.
 
 ### Features:
+
 - Uses the Hugging Face LLM image for SageMaker
-- Configures the endpoint based on settings in `llm_engineering.settings`
+- Configures the endpoint based on settings in `digital_research_assistant.settings`
 - Supports different endpoint types (MODEL_BASED or INFERENCE_COMPONENT_BASED)
 - Uses `SagemakerHuggingfaceStrategy` for deployment
 
 ### Prerequisites:
+
 - Ensure you have set up the SageMaker execution role and user as described in the previous sections
-- Configure your settings in `llm_engineering.settings`, including:
+- Configure your settings in `digital_research_assistant.settings`, including:
   - `GPU_INSTANCE_TYPE`
   - `SAGEMAKER_ENDPOINT_INFERENCE`
   - `SAGEMAKER_ENDPOINT_CONFIG_INFERENCE`
   - `ARN_ROLE` (the ARN of your SageMaker execution role)
 
 ### Usage:
+
 ```
 make deploy-inference-endpoint
 ```
@@ -145,19 +156,22 @@ File: `test.py`
 This script demonstrates how to use the deployed endpoint for inference tasks.
 
 ### Features:
+
 - Connects to the deployed SageMaker endpoint
 - Allows customization of input text and prompt
 - Supports parameter tuning (max_new_tokens, repetition_penalty, temperature)
 - Returns the generated text based on the input
 
 ### Prerequisites:
+
 - Ensure the SageMaker endpoint is successfully deployed
-- Configure your settings in `llm_engineering.settings`, including:
+- Configure your settings in `digital_research_assistant.settings`, including:
   - `SAGEMAKER_ENDPOINT_INFERENCE`
   - `MAX_NEW_TOKENS_INFERENCE`
   - `TEMPERATURE_INFERENCE`
 
 ### Usage:
+
 ```python
 python test.py
 ```
@@ -189,21 +203,25 @@ Ensure that you have this profile configured in your AWS CLI settings, or modify
 To use the Makefile, ensure you have `make` installed on your system. Then, you can run the following commands:
 
 1. To see available commands:
+
    ```
    make help
    ```
 
 2. To create a SageMaker role:
+
    ```
    make create-sagemaker-role
    ```
 
 3. To create a SageMaker execution role:
+
    ```
    make create-sagemaker-execution-role
    ```
 
 4. To deploy the inference endpoint:
+
    ```
    make deploy-inference-endpoint
    ```
@@ -228,4 +246,5 @@ This Makefile uses Poetry to manage Python dependencies and run scripts. Ensure 
 By using this Makefile, you can easily manage the entire lifecycle of your SageMaker project, from setting up roles to deploying and managing your inference endpoints.
 
 ## Note
+
 Ensure you have the necessary permissions in your AWS account to create IAM users and roles, deploy SageMaker endpoints, and perform inference before running these scripts.

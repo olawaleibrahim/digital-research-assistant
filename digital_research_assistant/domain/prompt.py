@@ -1,6 +1,6 @@
-from llm_engineering.domain.base import VectorBaseDocument
-from llm_engineering.domain.cleaned_documents import CleanedDocument
-from llm_engineering.domain.types import DataCategory
+from digital_research_assistant.domain.base import VectorBaseDocument
+from digital_research_assistant.domain.cleaned_documents import CleanedDocument
+from digital_research_assistant.domain.types import DataCategory
 
 
 class Prompt(VectorBaseDocument):

@@ -1,8 +1,8 @@
 from langchain.globals import set_verbose
 from loguru import logger
 
-from llm_engineering.application.rag.retriever import ContextRetriever
-from llm_engineering.infrastructure.opik_utils import configure_opik
+from digital_research_assistant.application.rag.retriever import ContextRetriever
+from digital_research_assistant.infrastructure.opik_utils import configure_opik
 
 if __name__ == "__main__":
     configure_opik()

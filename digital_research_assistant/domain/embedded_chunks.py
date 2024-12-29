@@ -2,7 +2,7 @@ from abc import ABC
 
 from pydantic import UUID4, Field
 
-from llm_engineering.domain.types import DataCategory
+from digital_research_assistant.domain.types import DataCategory
 
 from .base import VectorBaseDocument
 

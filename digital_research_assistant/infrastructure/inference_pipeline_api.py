@@ -3,12 +3,12 @@ from fastapi import FastAPI, HTTPException
 from opik import opik_context
 from pydantic import BaseModel
 
-from llm_engineering import settings
-from llm_engineering.application.rag.retriever import ContextRetriever
-from llm_engineering.application.utils import misc
-from llm_engineering.domain.embedded_chunks import EmbeddedChunk
-from llm_engineering.infrastructure.opik_utils import configure_opik
-from llm_engineering.model.inference import InferenceExecutor, LLMInferenceSagemakerEndpoint
+from digital_research_assistant import settings
+from digital_research_assistant.application.rag.retriever import ContextRetriever
+from digital_research_assistant.application.utils import misc
+from digital_research_assistant.domain.embedded_chunks import EmbeddedChunk
+from digital_research_assistant.infrastructure.opik_utils import configure_opik
+from digital_research_assistant.model.inference import InferenceExecutor, LLMInferenceSagemakerEndpoint
 
 configure_opik()
 

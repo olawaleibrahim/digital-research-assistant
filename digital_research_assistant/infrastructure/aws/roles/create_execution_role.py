@@ -6,9 +6,10 @@ from loguru import logger
 try:
     import boto3
 except ModuleNotFoundError:
-    logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning(
+        "Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from llm_engineering.settings import settings
+from digital_research_assistant.settings import settings
 
 
 def create_sagemaker_execution_role(role_name: str):
@@ -28,7 +29,8 @@ def create_sagemaker_execution_role(role_name: str):
     trust_relationship = {
         "Version": "2012-10-17",
         "Statement": [
-            {"Effect": "Allow", "Principal": {"Service": "sagemaker.amazonaws.com"}, "Action": "sts:AssumeRole"}
+            {"Effect": "Allow", "Principal": {
+                "Service": "sagemaker.amazonaws.com"}, "Action": "sts:AssumeRole"}
         ],
     }
 
@@ -57,7 +59,8 @@ def create_sagemaker_execution_role(role_name: str):
         return role["Role"]["Arn"]
 
     except iam.exceptions.EntityAlreadyExistsException:
-        logger.warning(f"Role '{role_name}' already exists. Fetching its ARN...")
+        logger.warning(
+            f"Role '{role_name}' already exists. Fetching its ARN...")
         role = iam.get_role(RoleName=role_name)
 
         return role["Role"]["Arn"]

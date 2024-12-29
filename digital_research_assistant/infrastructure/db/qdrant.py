@@ -2,7 +2,7 @@ from loguru import logger
 from qdrant_client import QdrantClient
 from qdrant_client.http.exceptions import UnexpectedResponse
 
-from llm_engineering.settings import settings
+from digital_research_assistant.settings import settings
 
 
 class QdrantDatabaseConnector:
@@ -26,7 +26,8 @@ class QdrantDatabaseConnector:
 
                     uri = f"{settings.QDRANT_DATABASE_HOST}:{settings.QDRANT_DATABASE_PORT}"
 
-                logger.info(f"Connection to Qdrant DB with URI successful: {uri}")
+                logger.info(
+                    f"Connection to Qdrant DB with URI successful: {uri}")
             except UnexpectedResponse:
                 logger.exception(
                     "Couldn't connect to Qdrant.",

@@ -1,13 +1,13 @@
 services:
   mongo:
     image: mongo:latest
-    container_name: "llm_engineering_mongo"
+    container_name: "digital_research_assistant_mongo"
     logging:
       options:
         max-size: 1g
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "llm_engineering"
-      MONGO_INITDB_ROOT_PASSWORD: "llm_engineering"
+      MONGO_INITDB_ROOT_USERNAME: "digital_research_assistant"
+      MONGO_INITDB_ROOT_PASSWORD: "digital_research_assistant"
     ports:
       - 27017:27017
     volumes:
@@ -18,7 +18,7 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
-    container_name: "llm_engineering_qdrant"
+    container_name: "digital_research_assistant_qdrant"
     ports:
       - 6333:6333
       - 6334:6334

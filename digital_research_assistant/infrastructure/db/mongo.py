@@ -2,7 +2,7 @@ from loguru import logger
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 
-from llm_engineering.settings import settings
+from digital_research_assistant.settings import settings
 
 
 class MongoDatabaseConnector:
@@ -17,7 +17,8 @@ class MongoDatabaseConnector:
 
                 raise
 
-        logger.info(f"Connection to MongoDB with URI successful: {settings.DATABASE_HOST}")
+        logger.info(
+            f"Connection to MongoDB with URI successful: {settings.DATABASE_HOST}")
 
         return cls._instance
 

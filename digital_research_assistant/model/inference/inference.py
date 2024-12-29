@@ -6,11 +6,12 @@ from loguru import logger
 try:
     import boto3
 except ModuleNotFoundError:
-    logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning(
+        "Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
 
-from llm_engineering.domain.inference import Inference
-from llm_engineering.settings import settings
+from digital_research_assistant.domain.inference import Inference
+from digital_research_assistant.settings import settings
 
 
 class LLMInferenceSagemakerEndpoint(Inference):

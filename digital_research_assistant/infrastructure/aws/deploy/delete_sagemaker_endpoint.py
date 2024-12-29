@@ -4,10 +4,11 @@ try:
     import boto3
     from botocore.exceptions import ClientError
 except ModuleNotFoundError:
-    logger.warning("Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning(
+        "Couldn't load AWS or SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
 
-from llm_engineering.settings import settings
+from digital_research_assistant.settings import settings
 
 
 def delete_endpoint_and_config(endpoint_name) -> None:
@@ -33,7 +34,8 @@ def delete_endpoint_and_config(endpoint_name) -> None:
 
     # Get the endpoint configuration name
     try:
-        response = sagemaker_client.describe_endpoint(EndpointName=endpoint_name)
+        response = sagemaker_client.describe_endpoint(
+            EndpointName=endpoint_name)
         config_name = response["EndpointConfigName"]
     except ClientError:
         logger.error("Error getting endpoint configuration and modelname.")
@@ -48,7 +50,8 @@ def delete_endpoint_and_config(endpoint_name) -> None:
         logger.error("Error deleting endpoint")
 
     try:
-        response = sagemaker_client.describe_endpoint_config(EndpointConfigName=endpoint_name)
+        response = sagemaker_client.describe_endpoint_config(
+            EndpointConfigName=endpoint_name)
         model_name = response["ProductionVariants"][0]["ModelName"]
     except ClientError:
         logger.error("Error getting model name.")

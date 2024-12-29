@@ -5,11 +5,12 @@ from loguru import logger
 try:
     from datasets import Dataset, DatasetDict, concatenate_datasets
 except ImportError:
-    logger.warning("Huggingface datasets not installed. Install with `pip install datasets`")
+    logger.warning(
+        "Huggingface datasets not installed. Install with `pip install datasets`")
 
 
-from llm_engineering.domain.base import VectorBaseDocument
-from llm_engineering.domain.types import DataCategory
+from digital_research_assistant.domain.base import VectorBaseDocument
+from digital_research_assistant.domain.types import DataCategory
 
 
 class DatasetType(Enum):
@@ -49,7 +50,8 @@ class InstructDataset(VectorBaseDocument):
         data = [sample.model_dump() for sample in self.samples]
 
         return Dataset.from_dict(
-            {"instruction": [d["instruction"] for d in data], "output": [d["answer"] for d in data]}
+            {"instruction": [d["instruction"] for d in data],
+                "output": [d["answer"] for d in data]}
         )
 
 
@@ -59,11 +61,14 @@ class TrainTestSplit(VectorBaseDocument):
     test_split_size: float
 
     def to_huggingface(self, flatten: bool = False) -> "DatasetDict":
-        train_datasets = {category.value: dataset.to_huggingface() for category, dataset in self.train.items()}
-        test_datasets = {category.value: dataset.to_huggingface() for category, dataset in self.test.items()}
+        train_datasets = {category.value: dataset.to_huggingface()
+                          for category, dataset in self.train.items()}
+        test_datasets = {category.value: dataset.to_huggingface()
+                         for category, dataset in self.test.items()}
 
         if flatten:
-            train_datasets = concatenate_datasets(list(train_datasets.values()))
+            train_datasets = concatenate_datasets(
+                list(train_datasets.values()))
             test_datasets = concatenate_datasets(list(test_datasets.values()))
         else:
             train_datasets = Dataset.from_dict(train_datasets)

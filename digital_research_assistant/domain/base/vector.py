@@ -10,10 +10,10 @@ from qdrant_client.http import exceptions
 from qdrant_client.http.models import Distance, VectorParams
 from qdrant_client.models import CollectionInfo, PointStruct, Record
 
-from llm_engineering.application.networks.embeddings import EmbeddingModelSingleton
-from llm_engineering.domain.exceptions import ImproperlyConfigured
-from llm_engineering.domain.types import DataCategory
-from llm_engineering.infrastructure.db.qdrant import connection
+from digital_research_assistant.application.networks.embeddings import EmbeddingModelSingleton
+from digital_research_assistant.domain.exceptions import ImproperlyConfigured
+from digital_research_assistant.domain.types import DataCategory
+from digital_research_assistant.infrastructure.db.qdrant import connection
 
 T = TypeVar("T", bound="VectorBaseDocument")
 
@@ -48,7 +48,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
         exclude_unset = kwargs.pop("exclude_unset", False)
         by_alias = kwargs.pop("by_alias", True)
 
-        payload = self.model_dump(exclude_unset=exclude_unset, by_alias=by_alias, **kwargs)
+        payload = self.model_dump(
+            exclude_unset=exclude_unset, by_alias=by_alias, **kwargs)
 
         _id = str(payload.pop("id"))
         vector = payload.pop("embedding", {})
@@ -72,7 +73,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
                 elif isinstance(value, list):
                     item[key] = [self._uuid_to_str(v) for v in value]
                 elif isinstance(value, dict):
-                    item[key] = {k: self._uuid_to_str(v) for k, v in value.items()}
+                    item[key] = {k: self._uuid_to_str(
+                        v) for k, v in value.items()}
 
         return item
 
@@ -90,7 +92,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
             try:
                 cls._bulk_insert(documents)
             except exceptions.UnexpectedResponse:
-                logger.error(f"Failed to insert documents in '{cls.get_collection_name()}'.")
+                logger.error(
+                    f"Failed to insert documents in '{cls.get_collection_name()}'.")
 
                 return False
 
@@ -100,14 +103,16 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
     def _bulk_insert(cls: Type[T], documents: list["VectorBaseDocument"]) -> None:
         points = [doc.to_point() for doc in documents]
 
-        connection.upsert(collection_name=cls.get_collection_name(), points=points)
+        connection.upsert(
+            collection_name=cls.get_collection_name(), points=points)
 
     @classmethod
     def bulk_find(cls: Type[T], limit: int = 10, **kwargs) -> tuple[list[T], UUID | None]:
         try:
             documents, next_offset = cls._bulk_find(limit=limit, **kwargs)
         except exceptions.UnexpectedResponse:
-            logger.error(f"Failed to search documents in '{cls.get_collection_name()}'.")
+            logger.error(
+                f"Failed to search documents in '{cls.get_collection_name()}'.")
 
             documents, next_offset = [], None
 
@@ -137,9 +142,11 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
     @classmethod
     def search(cls: Type[T], query_vector: list, limit: int = 10, **kwargs) -> list[T]:
         try:
-            documents = cls._search(query_vector=query_vector, limit=limit, **kwargs)
+            documents = cls._search(
+                query_vector=query_vector, limit=limit, **kwargs)
         except exceptions.UnexpectedResponse:
-            logger.error(f"Failed to search documents in '{cls.get_collection_name()}'.")
+            logger.error(
+                f"Failed to search documents in '{cls.get_collection_name()}'.")
 
             documents = []
 
@@ -173,7 +180,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
                 collection_name=collection_name, use_vector_index=use_vector_index
             )
             if collection_created is False:
-                raise RuntimeError(f"Couldn't create collection {collection_name}") from None
+                raise RuntimeError(
+                    f"Couldn't create collection {collection_name}") from None
 
             return connection.get_collection(collection_name=collection_name)
 
@@ -187,7 +195,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
     @classmethod
     def _create_collection(cls, collection_name: str, use_vector_index: bool = True) -> bool:
         if use_vector_index is True:
-            vectors_config = VectorParams(size=EmbeddingModelSingleton().embedding_size, distance=Distance.COSINE)
+            vectors_config = VectorParams(
+                size=EmbeddingModelSingleton().embedding_size, distance=Distance.COSINE)
         else:
             vectors_config = {}
 
@@ -255,7 +264,8 @@ class VectorBaseDocument(BaseModel, Generic[T], ABC):
             except ValueError:
                 continue
 
-        raise ValueError(f"No subclass found for collection name: {collection_name}")
+        raise ValueError(
+            f"No subclass found for collection name: {collection_name}")
 
     @classmethod
     def _has_class_attribute(cls: Type[T], attribute_name: str) -> bool:

@@ -1,8 +1,8 @@
 from typing_extensions import Annotated
 from zenml import get_step_context, step
 
-from llm_engineering.application.preprocessing import CleaningDispatcher
-from llm_engineering.domain.cleaned_documents import CleanedDocument
+from digital_research_assistant.application.preprocessing import CleaningDispatcher
+from digital_research_assistant.domain.cleaned_documents import CleanedDocument
 
 
 @step
@@ -15,7 +15,8 @@ def clean_documents(
         cleaned_documents.append(cleaned_document)
 
     step_context = get_step_context()
-    step_context.add_output_metadata(output_name="cleaned_documents", metadata=_get_metadata(cleaned_documents))
+    step_context.add_output_metadata(
+        output_name="cleaned_documents", metadata=_get_metadata(cleaned_documents))
 
     return cleaned_documents
 
@@ -29,7 +30,8 @@ def _get_metadata(cleaned_documents: list[CleanedDocument]) -> dict:
         if "authors" not in metadata[category]:
             metadata[category]["authors"] = list()
 
-        metadata[category]["num_documents"] = metadata[category].get("num_documents", 0) + 1
+        metadata[category]["num_documents"] = metadata[category].get(
+            "num_documents", 0) + 1
         metadata[category]["authors"].append(document.author_full_name)
 
     for value in metadata.values():

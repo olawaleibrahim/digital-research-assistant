@@ -6,9 +6,9 @@ from loguru import logger
 from pydantic import UUID4, BaseModel, Field
 from pymongo import errors
 
-from llm_engineering.domain.exceptions import ImproperlyConfigured
-from llm_engineering.infrastructure.db.mongo import connection
-from llm_engineering.settings import settings
+from digital_research_assistant.domain.exceptions import ImproperlyConfigured
+from digital_research_assistant.infrastructure.db.mongo import connection
+from digital_research_assistant.settings import settings
 
 _database = connection.get_database(settings.DATABASE_NAME)
 
@@ -44,7 +44,8 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
         exclude_unset = kwargs.pop("exclude_unset", False)
         by_alias = kwargs.pop("by_alias", True)
 
-        parsed = self.model_dump(exclude_unset=exclude_unset, by_alias=by_alias, **kwargs)
+        parsed = self.model_dump(
+            exclude_unset=exclude_unset, by_alias=by_alias, **kwargs)
 
         if "_id" not in parsed and "id" in parsed:
             parsed["_id"] = str(parsed.pop("id"))
@@ -88,7 +89,8 @@ class NoSQLBaseDocument(BaseModel, Generic[T], ABC):
 
             return new_instance
         except errors.OperationFailure:
-            logger.exception(f"Failed to retrieve document with filter options: {filter_options}")
+            logger.exception(
+                f"Failed to retrieve document with filter options: {filter_options}")
 
             raise
 

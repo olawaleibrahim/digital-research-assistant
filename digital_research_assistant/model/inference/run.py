@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from llm_engineering.domain.inference import Inference
-from llm_engineering.settings import settings
+from digital_research_assistant.domain.inference import Inference
+from digital_research_assistant.settings import settings
 
 
 class InferenceExecutor:

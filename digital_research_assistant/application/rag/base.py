@@ -4,7 +4,7 @@ from typing import Any
 from langchain.prompts import PromptTemplate
 from pydantic import BaseModel
 
-from llm_engineering.domain.queries import Query
+from digital_research_assistant.domain.queries import Query
 
 
 class PromptTemplateFactory(ABC, BaseModel):

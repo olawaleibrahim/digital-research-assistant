@@ -1,8 +1,8 @@
 import opik
 
-from llm_engineering.application.networks import CrossEncoderModelSingleton
-from llm_engineering.domain.embedded_chunks import EmbeddedChunk
-from llm_engineering.domain.queries import Query
+from .application.networks import CrossEncoderModelSingleton
+from .domain.embedded_chunks import EmbeddedChunk
+from .domain.queries import Query
 
 from .base import RAGStep
 

@@ -2,8 +2,8 @@ from loguru import logger
 from typing_extensions import Annotated
 from zenml import step
 
-from llm_engineering.domain.dataset import InstructTrainTestSplit, PreferenceTrainTestSplit
-from llm_engineering.settings import settings
+from digital_research_assistant.domain.dataset import InstructTrainTestSplit, PreferenceTrainTestSplit
+from digital_research_assistant.settings import settings
 
 
 @step
@@ -19,4 +19,5 @@ def push_to_huggingface(
     logger.info(f"Pushing dataset {dataset_id} to Hugging Face.")
 
     huggingface_dataset = dataset.to_huggingface(flatten=True)
-    huggingface_dataset.push_to_hub(dataset_id, token=settings.HUGGINGFACE_ACCESS_TOKEN)
+    huggingface_dataset.push_to_hub(
+        dataset_id, token=settings.HUGGINGFACE_ACCESS_TOKEN)

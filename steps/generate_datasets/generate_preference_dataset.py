@@ -3,10 +3,10 @@ from typing import Any
 from typing_extensions import Annotated
 from zenml import ArtifactConfig, get_step_context, step
 
-from llm_engineering.application.dataset import generation
-from llm_engineering.domain.dataset import DatasetType, PreferenceTrainTestSplit
-from llm_engineering.domain.prompt import GenerateDatasetSamplesPrompt
-from llm_engineering.domain.types import DataCategory
+from digital_research_assistant.application.dataset import generation
+from digital_research_assistant.domain.dataset import DatasetType, PreferenceTrainTestSplit
+from digital_research_assistant.domain.prompt import GenerateDatasetSamplesPrompt
+from digital_research_assistant.domain.types import DataCategory
 
 
 @step
@@ -21,8 +21,10 @@ def generate_preference_dataset(
         tags=["dataset", "preference", "cleaned"],
     ),
 ]:
-    dataset_generator = generation.get_dataset_generator(DatasetType.PREFERENCE)
-    datasets = dataset_generator.generate(prompts, test_size=test_split_size, mock=mock)
+    dataset_generator = generation.get_dataset_generator(
+        DatasetType.PREFERENCE)
+    datasets = dataset_generator.generate(
+        prompts, test_size=test_split_size, mock=mock)
 
     step_context = get_step_context()
     step_context.add_output_metadata(
@@ -37,7 +39,8 @@ def _get_metadata_preference_dataset(datasets: PreferenceTrainTestSplit) -> dict
     train_num_samples = {
         category: instruct_dataset.num_samples for category, instruct_dataset in datasets.train.items()
     }
-    test_num_samples = {category: instruct_dataset.num_samples for category, instruct_dataset in datasets.test.items()}
+    test_num_samples = {category: instruct_dataset.num_samples for category,
+                        instruct_dataset in datasets.test.items()}
 
     return {
         "data_categories": instruct_dataset_categories,

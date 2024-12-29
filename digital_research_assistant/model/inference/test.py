@@ -1,8 +1,8 @@
 from loguru import logger
 
-from llm_engineering.model.inference.inference import LLMInferenceSagemakerEndpoint
-from llm_engineering.model.inference.run import InferenceExecutor
-from llm_engineering.settings import settings
+from digital_research_assistant.model.inference.inference import LLMInferenceSagemakerEndpoint
+from digital_research_assistant.model.inference.run import InferenceExecutor
+from digital_research_assistant.settings import settings
 
 if __name__ == "__main__":
     text = "Write me a post about AWS SageMaker inference endpoints."

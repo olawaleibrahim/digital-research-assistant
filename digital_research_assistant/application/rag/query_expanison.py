@@ -2,8 +2,8 @@ import opik
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
-from llm_engineering.domain.queries import Query
-from llm_engineering.settings import settings
+from .domain.queries import Query
+from .settings import settings
 
 from .base import RAGStep
 from .prompt_templates import QueryExpansionTemplate
@@ -19,7 +19,8 @@ class QueryExpansion(RAGStep):
 
         query_expansion_template = QueryExpansionTemplate()
         prompt = query_expansion_template.create_template(expand_to_n - 1)
-        model = ChatOpenAI(model=settings.OPENAI_MODEL_ID, api_key=settings.OPENAI_API_KEY, temperature=0)
+        model = ChatOpenAI(model=settings.OPENAI_MODEL_ID,
+                           api_key=settings.OPENAI_API_KEY, temperature=0)
 
         chain = prompt | model
 
@@ -39,7 +40,8 @@ class QueryExpansion(RAGStep):
 
 
 if __name__ == "__main__":
-    query = Query.from_str("Write an article about the best types of advanced RAG methods.")
+    query = Query.from_str(
+        "Write an article about the best types of advanced RAG methods.")
     query_expander = QueryExpansion()
     expanded_queries = query_expander.generate(query, expand_to_n=3)
     for expanded_query in expanded_queries:

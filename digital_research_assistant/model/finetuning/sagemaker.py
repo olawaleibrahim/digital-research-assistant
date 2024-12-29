@@ -6,9 +6,10 @@ from loguru import logger
 try:
     from sagemaker.huggingface import HuggingFace
 except ModuleNotFoundError:
-    logger.warning("Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
+    logger.warning(
+        "Couldn't load SageMaker imports. Run 'poetry install --with aws' to support AWS.")
 
-from llm_engineering.settings import settings
+from digital_research_assistant.settings import settings
 
 finetuning_dir = Path(__file__).resolve().parent
 finetuning_requirements_path = finetuning_dir / "requirements.txt"
@@ -26,9 +27,11 @@ def run_finetuning_on_sagemaker(
     assert settings.AWS_ARN_ROLE, "AWS ARN role is required."
 
     if not finetuning_dir.exists():
-        raise FileNotFoundError(f"The directory {finetuning_dir} does not exist.")
+        raise FileNotFoundError(
+            f"The directory {finetuning_dir} does not exist.")
     if not finetuning_requirements_path.exists():
-        raise FileNotFoundError(f"The file {finetuning_requirements_path} does not exist.")
+        raise FileNotFoundError(
+            f"The file {finetuning_requirements_path} does not exist.")
 
     api = HfApi()
     user_info = api.whoami(token=settings.HUGGINGFACE_ACCESS_TOKEN)

@@ -5,8 +5,8 @@ from qdrant_client.http import exceptions
 from typing_extensions import Annotated
 from zenml import step
 
-from llm_engineering.domain.base.nosql import NoSQLBaseDocument
-from llm_engineering.domain.cleaned_documents import (
+from digital_research_assistant.domain.base.nosql import NoSQLBaseDocument
+from digital_research_assistant.domain.cleaned_documents import (
     CleanedArticleDocument,
     CleanedDocument,
     CleanedPostDocument,
@@ -20,7 +20,8 @@ def query_feature_store() -> Annotated[list, "queried_cleaned_documents"]:
 
     results = fetch_all_data()
 
-    cleaned_documents = [doc for query_result in results.values() for doc in query_result]
+    cleaned_documents = [doc for query_result in results.values()
+                         for doc in query_result]
 
     return cleaned_documents
 
@@ -66,12 +67,14 @@ def __fetch_repositories() -> list[CleanedDocument]:
 
 def __fetch(cleaned_document_type: type[CleanedDocument], limit: int = 1) -> list[CleanedDocument]:
     try:
-        cleaned_documents, next_offset = cleaned_document_type.bulk_find(limit=limit)
+        cleaned_documents, next_offset = cleaned_document_type.bulk_find(
+            limit=limit)
     except exceptions.UnexpectedResponse:
         return []
 
     while next_offset:
-        documents, next_offset = cleaned_document_type.bulk_find(limit=limit, offset=next_offset)
+        documents, next_offset = cleaned_document_type.bulk_find(
+            limit=limit, offset=next_offset)
         cleaned_documents.extend(documents)
 
     return cleaned_documents
