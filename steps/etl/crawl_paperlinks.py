@@ -6,6 +6,7 @@ from typing_extensions import Annotated
 from zenml import get_step_context, step
 
 from digital_research_assistant.domain.documents import UserDocument
+from digital_research_assistant.application.extractors import PDFExtractor
 
 
 @step
@@ -14,10 +15,15 @@ def crawl_paperlinks(user: UserDocument, user_full_name: str) -> Annotated[list[
     logger.info(f"Starting to append user filepaths ")
 
     ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-    # ROOT_DIR = "/home/olawale/Desktop/PROJECTS/llms/digital-research-assistant/data/input/"
-    username = f"/data/input/{user_full_name}/"
-    dir_path = str(ROOT_DIR) + username
+    user_dir = f"/data/input/{user_full_name}/"
+    dir_path = str(ROOT_DIR) + user_dir
     filepaths = os.listdir(dir_path)
+    extractor = PDFExtractor()
+
+    for filepath in tqdm(filepaths):
+        filepath = dir_path + filepath
+        successfull_extract = extractor.extract(
+            filepath=filepath, user=user, user_full_name=user_full_name)
 
     step_context = get_step_context()
     step_context.add_output_metadata(

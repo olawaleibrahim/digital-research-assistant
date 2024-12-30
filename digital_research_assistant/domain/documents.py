@@ -21,7 +21,7 @@ class UserDocument(NoSQLBaseDocument):
 
 class Document(NoSQLBaseDocument, ABC):
     content: dict
-    platform: str
+    filetype: str
     author_id: UUID4 = Field(alias="author_id")
     author_full_name: str = Field(alias="author_full_name")
 
@@ -47,3 +47,10 @@ class ArticleDocument(Document):
 
     class Settings:
         name = DataCategory.ARTICLES
+
+
+class PDFDocument(Document):
+    filepath: str
+
+    class Settings:
+        name = DataCategory.PDFS

@@ -64,7 +64,7 @@ Examples:
 )
 @click.option(
     "--etl-config-filename",
-    default="digital_data_etl_paul_iusztin.yaml",
+    default="olawale_ibrahim.yaml",
     help="Filename of the ETL config file.",
 )
 @click.option(
