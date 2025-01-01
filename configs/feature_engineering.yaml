@@ -4,8 +4,8 @@ settings:
     skip_build: True
   orchestrator.sagemaker:
     synchronous: false
-    
+
 parameters:
-  author_full_names:
-    - Maxime Labonne
-    - Paul Iusztin
+  user_full_name:
+    - olawale_ibrahim
+    - olawale_ibrahim2

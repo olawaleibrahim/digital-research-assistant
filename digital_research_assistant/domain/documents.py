@@ -54,3 +54,10 @@ class PDFDocument(Document):
 
     class Settings:
         name = DataCategory.PDFS
+
+
+class WordDocument(Document):
+    filepath: str
+
+    class Settings:
+        name = DataCategory.DOCX

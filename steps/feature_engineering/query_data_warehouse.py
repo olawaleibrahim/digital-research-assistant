@@ -4,21 +4,21 @@ from loguru import logger
 from typing_extensions import Annotated
 from zenml import get_step_context, step
 
-from digital_research_assistant.application import utils
 from digital_research_assistant.domain.base.nosql import NoSQLBaseDocument
-from digital_research_assistant.domain.documents import ArticleDocument, Document, PostDocument, RepositoryDocument, UserDocument
+from digital_research_assistant.domain.documents import PDFDocument, WordDocument, Document, UserDocument
 
 
 @step
 def query_data_warehouse(
-    author_full_names: list[str],
+    user_full_names: list[str],
 ) -> Annotated[list, "raw_documents"]:
     documents = []
     authors = []
-    for author_full_name in author_full_names:
-        logger.info(f"Querying data warehouse for user: {author_full_name}")
+    for user_full_name in user_full_names:
+        logger.info(f"Querying data warehouse for user: {user_full_name}")
 
-        first_name, last_name = utils.split_user_full_name(author_full_name)
+        user_full_name = user_full_name.split("_")
+        first_name, last_name = user_full_name[0], user_full_name[1]
         logger.info(f"First name: {first_name}, Last name: {last_name}")
         user = UserDocument.get_or_create(
             first_name=first_name, last_name=last_name)
@@ -41,9 +41,8 @@ def fetch_all_data(user: UserDocument) -> dict[str, list[NoSQLBaseDocument]]:
     user_id = str(user.id)
     with ThreadPoolExecutor() as executor:
         future_to_query = {
-            executor.submit(__fetch_articles, user_id): "articles",
-            executor.submit(__fetch_posts, user_id): "posts",
-            executor.submit(__fetch_repositories, user_id): "repositories",
+            executor.submit(__fetch_pdfs, user_id): "pdfs",
+            executor.submit(__fetch_docx, user_id): "docx",
         }
 
         results = {}
@@ -59,16 +58,12 @@ def fetch_all_data(user: UserDocument) -> dict[str, list[NoSQLBaseDocument]]:
     return results
 
 
-def __fetch_articles(user_id) -> list[NoSQLBaseDocument]:
-    return ArticleDocument.bulk_find(author_id=user_id)
+def __fetch_pdfs(user_id) -> list[NoSQLBaseDocument]:
+    return PDFDocument.bulk_find(author_id=user_id)
 
 
-def __fetch_posts(user_id) -> list[NoSQLBaseDocument]:
-    return PostDocument.bulk_find(author_id=user_id)
-
-
-def __fetch_repositories(user_id) -> list[NoSQLBaseDocument]:
-    return RepositoryDocument.bulk_find(author_id=user_id)
+def __fetch_docx(user_id) -> list[NoSQLBaseDocument]:
+    return WordDocument.bulk_find(author_id=user_id)
 
 
 def _get_metadata(documents: list[Document]) -> dict:

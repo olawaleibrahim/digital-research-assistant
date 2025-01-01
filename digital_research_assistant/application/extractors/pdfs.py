@@ -6,7 +6,6 @@ from digital_research_assistant.domain.documents import PDFDocument
 
 
 def extract_text_from_pdf(pdf_path):
-    """Extract text from a PDF file."""
     text = ""
     with open(pdf_path, 'rb') as file:
         reader = PyPDF2.PdfReader(file)
@@ -44,10 +43,11 @@ class PDFExtractor():
             return
 
         logger.info(f"Starting extracting PDF: {filepath}")
+        content = extract_pdf(filepath)
 
         data = {
             "Title": filepath,
-            "Content": extract_pdf(filepath)
+            "Content": content
         }
 
         user = kwargs["user"]
@@ -63,3 +63,5 @@ class PDFExtractor():
         instance.save()
 
         logger.info(f"Successfully extracted and saved file: {filepath}")
+
+        return content

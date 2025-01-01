@@ -67,12 +67,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 # Data pipelines
-run-digital-data-etl-alex = "echo 'It is not supported anymore.'"
-run-digital-data-olawale-ibrahim = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim.yaml"
-run-digital-data-olawale-ibrahim2 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim2.yaml"
-run-digital-data-etl = [
-    "run-digital-data-olawale-ibrahim",
-    "run-digital-data-olawale-ibrahim2",
+run-extract-data-olawale-ibrahim = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim.yaml"
+run-extract-data-olawale-ibrahim2 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim2.yaml"
+run-extract-data-etl = [
+    "run-extract-data-olawale-ibrahim",
+    "run-extract-data-olawale-ibrahim2",
 ]
 run-feature-engineering-pipeline = "poetry run python -m tools.run --no-cache --run-feature-engineering"
 run-generate-instruct-datasets-pipeline = "poetry run python -m tools.run --no-cache --run-generate-instruct-datasets"

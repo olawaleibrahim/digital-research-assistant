@@ -6,7 +6,8 @@ from loguru import logger
 
 from digital_research_assistant import settings
 from pipelines import (
-    digital_data_etl
+    extract_data_etl,
+    feature_engineering,
 )
 
 
@@ -146,12 +147,19 @@ def main(
 
     if run_etl:
         run_args_etl = {}
-        pipeline_args["config_path"] = root_dir / \
-            "configs" / etl_config_filename
+        pipeline_args["config_path"] = Path(
+            f"{root_dir}/configs/{etl_config_filename}")
         assert pipeline_args["config_path"].exists(
         ), f"Config file not found: {pipeline_args['config_path']}"
-        pipeline_args["run_name"] = f"digital_data_etl_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
-        digital_data_etl.with_options(**pipeline_args)(**run_args_etl)
+
+        pipeline_args["run_name"] = f"extract_data_etl{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        extract_data_etl.with_options(**pipeline_args)(**run_args_etl)
+
+    if run_feature_engineering:
+        run_args_fe = {}
+        pipeline_args["config_path"] = f"{root_dir}/configs/feature_engineering.yaml"
+        pipeline_args["run_name"] = f"feature_engineering_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        feature_engineering.with_options(**pipeline_args)(**run_args_fe)
 
 
 if __name__ == "__main__":

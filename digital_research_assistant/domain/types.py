@@ -14,3 +14,4 @@ class DataCategory(StrEnum):
     ARTICLES = "articles"
     REPOSITORIES = "repositories"
     PDFS = "pdfs"
+    DOCX = "docx"
