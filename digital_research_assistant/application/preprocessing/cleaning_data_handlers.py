@@ -2,16 +2,14 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 
 from digital_research_assistant.domain.cleaned_documents import (
-    CleanedArticleDocument,
     CleanedDocument,
-    CleanedPostDocument,
-    CleanedRepositoryDocument,
+    CleanedPDFDocument,
+    CleanedWordDocument,
 )
 from digital_research_assistant.domain.documents import (
-    ArticleDocument,
+    PDFDocument,
+    WordDocument,
     Document,
-    PostDocument,
-    RepositoryDocument,
 )
 
 from .operations import clean_text
@@ -31,41 +29,25 @@ class CleaningDataHandler(ABC, Generic[DocumentT, CleanedDocumentT]):
         pass
 
 
-class PostCleaningHandler(CleaningDataHandler):
-    def clean(self, data_model: PostDocument) -> CleanedPostDocument:
-        return CleanedPostDocument(
+class PDFCleaningHandler(CleaningDataHandler):
+    def clean(self, data_model: PDFDocument) -> CleanedPDFDocument:
+        return CleanedPDFDocument(
             id=data_model.id,
             content=clean_text(" #### ".join(data_model.content.values())),
-            platform=data_model.platform,
-            author_id=data_model.author_id,
-            author_full_name=data_model.author_full_name,
-            image=data_model.image if data_model.image else None,
-        )
-
-
-class ArticleCleaningHandler(CleaningDataHandler):
-    def clean(self, data_model: ArticleDocument) -> CleanedArticleDocument:
-        valid_content = [
-            content for content in data_model.content.values() if content]
-
-        return CleanedArticleDocument(
-            id=data_model.id,
-            content=clean_text(" #### ".join(valid_content)),
-            platform=data_model.platform,
-            link=data_model.link,
+            filetype=data_model.filetype,
+            filepath=data_model.filepath,
             author_id=data_model.author_id,
             author_full_name=data_model.author_full_name,
         )
 
 
-class RepositoryCleaningHandler(CleaningDataHandler):
-    def clean(self, data_model: RepositoryDocument) -> CleanedRepositoryDocument:
-        return CleanedRepositoryDocument(
+class WordCleaningHandler(CleaningDataHandler):
+    def clean(self, data_model: WordDocument) -> CleanedWordDocument:
+        return CleanedWordDocument(
             id=data_model.id,
             content=clean_text(" #### ".join(data_model.content.values())),
-            platform=data_model.platform,
-            name=data_model.name,
-            link=data_model.link,
+            filetype=data_model.filetype,
+            filepath=data_model.filepath,
             author_id=data_model.author_id,
             author_full_name=data_model.author_full_name,
         )

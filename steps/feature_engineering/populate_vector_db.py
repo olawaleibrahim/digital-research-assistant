@@ -7,7 +7,7 @@ from digital_research_assistant.domain.base import VectorBaseDocument
 
 
 @step
-def load_to_vector_db(
+def populate_vector_db(
     documents: Annotated[list, "documents"],
 ) -> Annotated[bool, "successful"]:
     logger.info(

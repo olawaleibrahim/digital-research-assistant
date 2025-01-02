@@ -1,5 +1,4 @@
 from abc import ABC
-from typing import Optional
 
 from pydantic import UUID4, Field
 
@@ -9,30 +8,22 @@ from digital_research_assistant.domain.types import DataCategory
 
 class Chunk(VectorBaseDocument, ABC):
     content: str
-    platform: str
+    filetype: str
     document_id: UUID4
     author_id: UUID4
     author_full_name: str
     metadata: dict = Field(default_factory=dict)
 
 
-class PostChunk(Chunk):
-    image: Optional[str] = None
+class PDFChunk(Chunk):
+    filepath: str
 
     class Config:
-        category = DataCategory.POSTS
+        category = DataCategory.PDFS
 
 
-class ArticleChunk(Chunk):
-    link: str
-
-    class Config:
-        category = DataCategory.ARTICLES
-
-
-class RepositoryChunk(Chunk):
-    name: str
-    link: str
+class WordChunk(Chunk):
+    filepath: str
 
     class Config:
-        category = DataCategory.REPOSITORIES
+        category = DataCategory.DOCX

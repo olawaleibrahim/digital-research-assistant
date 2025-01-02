@@ -26,29 +26,6 @@ class Document(NoSQLBaseDocument, ABC):
     author_full_name: str = Field(alias="author_full_name")
 
 
-class RepositoryDocument(Document):
-    name: str
-    link: str
-
-    class Settings:
-        name = DataCategory.REPOSITORIES
-
-
-class PostDocument(Document):
-    image: Optional[str] = None
-    link: str | None = None
-
-    class Settings:
-        name = DataCategory.POSTS
-
-
-class ArticleDocument(Document):
-    link: str
-
-    class Settings:
-        name = DataCategory.ARTICLES
-
-
 class PDFDocument(Document):
     filepath: str
 

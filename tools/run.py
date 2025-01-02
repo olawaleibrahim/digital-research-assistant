@@ -6,6 +6,7 @@ from loguru import logger
 
 from digital_research_assistant import settings
 from pipelines import (
+    export_artifact_to_json,
     extract_data_etl,
     feature_engineering,
 )
@@ -160,6 +161,15 @@ def main(
         pipeline_args["config_path"] = f"{root_dir}/configs/feature_engineering.yaml"
         pipeline_args["run_name"] = f"feature_engineering_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
         feature_engineering.with_options(**pipeline_args)(**run_args_fe)
+
+    if run_export_artifact_to_json:
+        run_args_etl = {}
+        pipeline_args["config_path"] = root_dir / \
+            "configs" / "export_artifact_to_json.yaml"
+        assert pipeline_args["config_path"].exists(
+        ), f"Config file not found: {pipeline_args['config_path']}"
+        pipeline_args["run_name"] = f"export_artifact_to_json_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        export_artifact_to_json.with_options(**pipeline_args)(**run_args_etl)
 
 
 if __name__ == "__main__":

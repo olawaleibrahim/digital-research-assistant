@@ -3,12 +3,11 @@ from abc import ABC, abstractmethod
 from typing import Generic, TypeVar
 from uuid import UUID
 
-from digital_research_assistant.domain.chunks import ArticleChunk, Chunk, PostChunk, RepositoryChunk
+from digital_research_assistant.domain.chunks import Chunk, PDFChunk, WordChunk
 from digital_research_assistant.domain.cleaned_documents import (
-    CleanedArticleDocument,
+    CleanedPDFDocument,
+    CleanedWordDocument,
     CleanedDocument,
-    CleanedPostDocument,
-    CleanedRepositoryDocument,
 )
 
 from .operations import chunk_article, chunk_text
@@ -35,7 +34,7 @@ class ChunkingDataHandler(ABC, Generic[CleanedDocumentT, ChunkT]):
         pass
 
 
-class PostChunkingHandler(ChunkingDataHandler):
+class PDFChunkingHandler(ChunkingDataHandler):
     @property
     def metadata(self) -> dict:
         return {
@@ -43,7 +42,7 @@ class PostChunkingHandler(ChunkingDataHandler):
             "chunk_overlap": 25,
         }
 
-    def chunk(self, data_model: CleanedPostDocument) -> list[PostChunk]:
+    def chunk(self, data_model: CleanedPDFDocument) -> list[PDFChunk]:
         data_models_list = []
 
         cleaned_content = data_model.content
@@ -53,10 +52,11 @@ class PostChunkingHandler(ChunkingDataHandler):
 
         for chunk in chunks:
             chunk_id = hashlib.md5(chunk.encode()).hexdigest()
-            model = PostChunk(
+            model = PDFChunk(
                 id=UUID(chunk_id, version=4),
                 content=chunk,
-                platform=data_model.platform,
+                filepath=data_model.filepath,
+                filetype=data_model.filetype,
                 document_id=data_model.id,
                 author_id=data_model.author_id,
                 author_full_name=data_model.author_full_name,
@@ -68,7 +68,7 @@ class PostChunkingHandler(ChunkingDataHandler):
         return data_models_list
 
 
-class ArticleChunkingHandler(ChunkingDataHandler):
+class WordChunkingHandler(ChunkingDataHandler):
     @property
     def metadata(self) -> dict:
         return {
@@ -76,7 +76,7 @@ class ArticleChunkingHandler(ChunkingDataHandler):
             "max_length": 2000,
         }
 
-    def chunk(self, data_model: CleanedArticleDocument) -> list[ArticleChunk]:
+    def chunk(self, data_model: CleanedWordDocument) -> list[WordChunk]:
         data_models_list = []
 
         cleaned_content = data_model.content
@@ -86,45 +86,11 @@ class ArticleChunkingHandler(ChunkingDataHandler):
 
         for chunk in chunks:
             chunk_id = hashlib.md5(chunk.encode()).hexdigest()
-            model = ArticleChunk(
+            model = WordChunk(
                 id=UUID(chunk_id, version=4),
                 content=chunk,
-                platform=data_model.platform,
-                link=data_model.link,
-                document_id=data_model.id,
-                author_id=data_model.author_id,
-                author_full_name=data_model.author_full_name,
-                metadata=self.metadata,
-            )
-            data_models_list.append(model)
-
-        return data_models_list
-
-
-class RepositoryChunkingHandler(ChunkingDataHandler):
-    @property
-    def metadata(self) -> dict:
-        return {
-            "chunk_size": 1500,
-            "chunk_overlap": 100,
-        }
-
-    def chunk(self, data_model: CleanedRepositoryDocument) -> list[RepositoryChunk]:
-        data_models_list = []
-
-        cleaned_content = data_model.content
-        chunks = chunk_text(
-            cleaned_content, chunk_size=self.metadata["chunk_size"], chunk_overlap=self.metadata["chunk_overlap"]
-        )
-
-        for chunk in chunks:
-            chunk_id = hashlib.md5(chunk.encode()).hexdigest()
-            model = RepositoryChunk(
-                id=UUID(chunk_id, version=4),
-                content=chunk,
-                platform=data_model.platform,
-                name=data_model.name,
-                link=data_model.link,
+                filepath=data_model.filepath,
+                filetype=data_model.filetype,
                 document_id=data_model.id,
                 author_id=data_model.author_id,
                 author_full_name=data_model.author_full_name,

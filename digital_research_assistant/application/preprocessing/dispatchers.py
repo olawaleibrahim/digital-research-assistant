@@ -4,35 +4,30 @@ from digital_research_assistant.domain.base import NoSQLBaseDocument, VectorBase
 from digital_research_assistant.domain.types import DataCategory
 
 from .chunking_data_handlers import (
-    ArticleChunkingHandler,
     ChunkingDataHandler,
-    PostChunkingHandler,
-    RepositoryChunkingHandler,
+    PDFChunkingHandler,
+    WordChunkingHandler,
 )
 from .cleaning_data_handlers import (
-    ArticleCleaningHandler,
+    PDFCleaningHandler,
     CleaningDataHandler,
-    PostCleaningHandler,
-    RepositoryCleaningHandler,
+    WordCleaningHandler,
 )
 from .embedding_data_handlers import (
-    ArticleEmbeddingHandler,
     EmbeddingDataHandler,
-    PostEmbeddingHandler,
+    PDFEmbeddingHandler,
+    WordEmbeddingHandler,
     QueryEmbeddingHandler,
-    RepositoryEmbeddingHandler,
 )
 
 
 class CleaningHandlerFactory:
     @staticmethod
     def create_handler(data_category: DataCategory) -> CleaningDataHandler:
-        if data_category == DataCategory.POSTS:
-            return PostCleaningHandler()
-        elif data_category == DataCategory.ARTICLES:
-            return ArticleCleaningHandler()
-        elif data_category == DataCategory.REPOSITORIES:
-            return RepositoryCleaningHandler()
+        if data_category == DataCategory.PDFS:
+            return PDFCleaningHandler()
+        elif data_category == DataCategory.DOCX:
+            return WordCleaningHandler()
         else:
             raise ValueError("Unsupported data type")
 
@@ -58,12 +53,10 @@ class CleaningDispatcher:
 class ChunkingHandlerFactory:
     @staticmethod
     def create_handler(data_category: DataCategory) -> ChunkingDataHandler:
-        if data_category == DataCategory.POSTS:
-            return PostChunkingHandler()
-        elif data_category == DataCategory.ARTICLES:
-            return ArticleChunkingHandler()
-        elif data_category == DataCategory.REPOSITORIES:
-            return RepositoryChunkingHandler()
+        if data_category == DataCategory.PDFS:
+            return PDFChunkingHandler()
+        elif data_category == DataCategory.DOCX:
+            return WordChunkingHandler()
         else:
             raise ValueError("Unsupported data type")
 
@@ -91,12 +84,10 @@ class EmbeddingHandlerFactory:
     def create_handler(data_category: DataCategory) -> EmbeddingDataHandler:
         if data_category == DataCategory.QUERIES:
             return QueryEmbeddingHandler()
-        if data_category == DataCategory.POSTS:
-            return PostEmbeddingHandler()
-        elif data_category == DataCategory.ARTICLES:
-            return ArticleEmbeddingHandler()
-        elif data_category == DataCategory.REPOSITORIES:
-            return RepositoryEmbeddingHandler()
+        if data_category == DataCategory.PDFS:
+            return PDFEmbeddingHandler()
+        elif data_category == DataCategory.DOCX:
+            return WordEmbeddingHandler()
         else:
             raise ValueError("Unsupported data type")
 

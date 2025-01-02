@@ -9,34 +9,25 @@ from .types import DataCategory
 
 class CleanedDocument(VectorBaseDocument, ABC):
     content: str
-    platform: str
+    filepath: str
+    filetype: str
     author_id: UUID4
     author_full_name: str
 
 
-class CleanedPostDocument(CleanedDocument):
+class CleanedPDFDocument(CleanedDocument):
     image: Optional[str] = None
 
     class Config:
-        name = "cleaned_posts"
-        category = DataCategory.POSTS
+        name = "cleaned_pdfs"
+        category = DataCategory.PDFS
         use_vector_index = False
 
 
-class CleanedArticleDocument(CleanedDocument):
-    link: str
+class CleanedWordDocument(CleanedDocument):
+    image: Optional[str] = None
 
     class Config:
-        name = "cleaned_articles"
-        category = DataCategory.ARTICLES
-        use_vector_index = False
-
-
-class CleanedRepositoryDocument(CleanedDocument):
-    name: str
-    link: str
-
-    class Config:
-        name = "cleaned_repositories"
-        category = DataCategory.REPOSITORIES
+        name = "cleaned_docx"
+        category = DataCategory.DOCX
         use_vector_index = False

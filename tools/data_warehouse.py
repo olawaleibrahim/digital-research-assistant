@@ -5,7 +5,7 @@ import click
 from loguru import logger
 
 from digital_research_assistant.domain.base.nosql import NoSQLBaseDocument
-from digital_research_assistant.domain.documents import ArticleDocument, PostDocument, RepositoryDocument, UserDocument
+from digital_research_assistant.domain.documents import PDFDocument, WordDocument, UserDocument
 
 
 @click.command()
@@ -45,9 +45,8 @@ def __export(data_dir: Path) -> None:
     logger.info(f"Exporting data warehouse to {data_dir}...")
     data_dir.mkdir(parents=True, exist_ok=True)
 
-    __export_data_category(data_dir, ArticleDocument)
-    __export_data_category(data_dir, PostDocument)
-    __export_data_category(data_dir, RepositoryDocument)
+    __export_data_category(data_dir, PDFDocument)
+    __export_data_category(data_dir, WordDocument)
     __export_data_category(data_dir, UserDocument)
 
 
@@ -68,9 +67,8 @@ def __import(data_dir: Path) -> None:
     ), f"{data_dir} is not a directory or it doesn't exists."
 
     data_category_classes = {
-        "ArticleDocument": ArticleDocument,
-        "PostDocument": PostDocument,
-        "RepositoryDocument": RepositoryDocument,
+        "PDFDocument": PDFDocument,
+        "WordDocument": WordDocument,
         "UserDocument": UserDocument,
     }
 

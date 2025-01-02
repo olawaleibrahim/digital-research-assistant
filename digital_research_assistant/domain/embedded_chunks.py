@@ -10,7 +10,7 @@ from .base import VectorBaseDocument
 class EmbeddedChunk(VectorBaseDocument, ABC):
     content: str
     embedding: list[float] | None
-    platform: str
+    filetype: str
     document_id: UUID4
     author_id: UUID4
     author_full_name: str
@@ -23,7 +23,7 @@ class EmbeddedChunk(VectorBaseDocument, ABC):
             context += f"""
             Chunk {i + 1}:
             Type: {chunk.__class__.__name__}
-            Platform: {chunk.platform}
+            Filetype: {chunk.filetype}
             Author: {chunk.author_full_name}
             Content: {chunk.content}\n
             """
@@ -31,27 +31,17 @@ class EmbeddedChunk(VectorBaseDocument, ABC):
         return context
 
 
-class EmbeddedPostChunk(EmbeddedChunk):
+class EmbeddedPDFChunk(EmbeddedChunk):
     class Config:
-        name = "embedded_posts"
-        category = DataCategory.POSTS
+        name = "embedded_pdfs"
+        category = DataCategory.PDFS
         use_vector_index = True
 
 
-class EmbeddedArticleChunk(EmbeddedChunk):
+class EmbeddedWordChunk(EmbeddedChunk):
     link: str
 
     class Config:
-        name = "embedded_articles"
-        category = DataCategory.ARTICLES
-        use_vector_index = True
-
-
-class EmbeddedRepositoryChunk(EmbeddedChunk):
-    name: str
-    link: str
-
-    class Config:
-        name = "embedded_repositories"
-        category = DataCategory.REPOSITORIES
+        name = "embedded_docx"
+        category = DataCategory.DOCX
         use_vector_index = True

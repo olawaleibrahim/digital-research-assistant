@@ -67,8 +67,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poe.tasks]
 # Data pipelines
-run-extract-data-olawale-ibrahim = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim.yaml"
-run-extract-data-olawale-ibrahim2 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_ibrahim2.yaml"
+run-extract-data-olawale-ibrahim = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_papers.yaml"
+run-extract-data-olawale-ibrahim2 = "poetry run python -m tools.run --run-etl --no-cache --etl-config-filename olawale_formal.yaml"
 run-extract-data-etl = [
     "run-extract-data-olawale-ibrahim",
     "run-extract-data-olawale-ibrahim2",
