@@ -124,9 +124,9 @@ test-sagemaker-endpoint = "poetry run python -m digital_research_assistant.model
 delete-inference-endpoint = "poetry run python -m digital_research_assistant.infrastructure.aws.deploy.delete_sagemaker_endpoint"
 
 ## Docker
-build-docker-image = "docker buildx build --platform linux/amd64 -t llmtwin -f Dockerfile ."
-run-docker-end-to-end-data-pipeline = "docker run --rm --network host --shm-size=2g --env-file .env llmtwin poetry poe --no-cache --run-end-to-end-data"
-bash-docker-container = "docker run --rm -it --network host --env-file .env llmtwin bash"
+build-docker-image = "docker buildx build --platform linux/amd64 -t digital_research_assistant -f Dockerfile ."
+run-docker-end-to-end-data-pipeline = "docker run --rm --network host --shm-size=2g --env-file .env digital_research_assistant poetry poe --no-cache --run-end-to-end-data"
+bash-docker-container = "docker run --rm -it --network host --env-file .env digital_research_assistant bash"
 
 # QA
 lint-check = "poetry run ruff check ."

@@ -93,13 +93,16 @@ def finetune(
         def format_samples_sft(examples):
             text = []
             for instruction, output in zip(examples["instruction"], examples["output"], strict=False):
-                message = alpaca_template.format(instruction, output) + EOS_TOKEN
+                message = alpaca_template.format(
+                    instruction, output) + EOS_TOKEN
                 text.append(message)
 
             return {"text": text}
 
-        dataset1 = load_dataset(f"{dataset_huggingface_workspace}/llmtwin", split="train")
-        dataset2 = load_dataset("mlabonne/FineTome-Alpaca-100k", split="train[:10000]")
+        dataset1 = load_dataset(
+            f"{dataset_huggingface_workspace}/professionaldocuments", split="train")
+        dataset2 = load_dataset(
+            "mlabonne/FineTome-Alpaca-100k", split="train[:10000]")
         dataset = concatenate_datasets([dataset1, dataset2])
         if is_dummy:
             try:
@@ -108,7 +111,8 @@ def finetune(
                 print("Dummy mode active. Failed to trim the dataset to 400 samples.")  # noqa
         print(f"Loaded dataset with {len(dataset)} samples.")  # noqa
 
-        dataset = dataset.map(format_samples_sft, batched=True, remove_columns=dataset.column_names)
+        dataset = dataset.map(format_samples_sft, batched=True,
+                              remove_columns=dataset.column_names)
         dataset = dataset.train_test_split(test_size=0.05)
 
         print("Training dataset example:")  # noqa
@@ -151,7 +155,8 @@ def finetune(
 
             return {"prompt": example["prompt"], "chosen": example["chosen"], "rejected": example["rejected"]}
 
-        dataset = load_dataset(f"{dataset_huggingface_workspace}/llmtwin-dpo", split="train")
+        dataset = load_dataset(
+            f"{dataset_huggingface_workspace}/professionaldocuments-dpo", split="train")
         if is_dummy:
             try:
                 dataset = dataset.select(range(400))
@@ -212,18 +217,21 @@ def inference(
     inputs = tokenizer([message], return_tensors="pt").to("cuda")
 
     text_streamer = TextStreamer(tokenizer)
-    _ = model.generate(**inputs, streamer=text_streamer, max_new_tokens=max_new_tokens, use_cache=True)
+    _ = model.generate(**inputs, streamer=text_streamer,
+                       max_new_tokens=max_new_tokens, use_cache=True)
 
 
 def save_model(model: Any, tokenizer: Any, output_dir: str, push_to_hub: bool = False, repo_id: Optional[str] = None):
-    model.save_pretrained_merged(output_dir, tokenizer, save_method="merged_16bit")
+    model.save_pretrained_merged(
+        output_dir, tokenizer, save_method="merged_16bit")
 
     if push_to_hub and repo_id:
         print(f"Saving model to '{repo_id}'")  # noqa
-        model.push_to_hub_merged(repo_id, tokenizer, save_method="merged_16bit")
+        model.push_to_hub_merged(
+            repo_id, tokenizer, save_method="merged_16bit")
 
 
-def check_if_huggingface_model_exists(model_id: str, default_value: str = "mlabonne/TwinLlama-3.1-8B") -> str:
+def check_if_huggingface_model_exists(model_id: str, default_value: str = "olawaleibrahim/DRA-3.1-8B") -> str:
     api = HfApi()
 
     try:
@@ -232,7 +240,7 @@ def check_if_huggingface_model_exists(model_id: str, default_value: str = "mlabo
         print(f"Model '{model_id}' does not exist.")  # noqa
         model_id = default_value
         print(f"Defaulting to '{model_id}'")  # noqa
-        print("Train your own 'TwinLlama-3.1-8B' to avoid this behavior.")  # noqa
+        print("Train your own 'DRA-3.1-8B' to avoid this behavior.")  # noqa
 
     return model_id
 
@@ -243,9 +251,12 @@ if __name__ == "__main__":
     parser.add_argument("--num_train_epochs", type=int, default=3)
     parser.add_argument("--per_device_train_batch_size", type=int, default=2)
     parser.add_argument("--learning_rate", type=float, default=3e-4)
-    parser.add_argument("--dataset_huggingface_workspace", type=str, default="mlabonne")
-    parser.add_argument("--model_output_huggingface_workspace", type=str, default="mlabonne")
-    parser.add_argument("--is_dummy", type=bool, default=False, help="Flag to reduce the dataset size for testing")
+    parser.add_argument("--dataset_huggingface_workspace",
+                        type=str, default="mlabonne")
+    parser.add_argument("--model_output_huggingface_workspace",
+                        type=str, default="mlabonne")
+    parser.add_argument("--is_dummy", type=bool, default=False,
+                        help="Flag to reduce the dataset size for testing")
     parser.add_argument(
         "--finetuning_type",
         type=str,
@@ -254,9 +265,12 @@ if __name__ == "__main__":
         help="Parameter to choose the finetuning stage.",
     )
 
-    parser.add_argument("--output_data_dir", type=str, default=os.environ["SM_OUTPUT_DATA_DIR"])
-    parser.add_argument("--model_dir", type=str, default=os.environ["SM_MODEL_DIR"])
-    parser.add_argument("--n_gpus", type=str, default=os.environ["SM_NUM_GPUS"])
+    parser.add_argument("--output_data_dir", type=str,
+                        default=os.environ["SM_OUTPUT_DATA_DIR"])
+    parser.add_argument("--model_dir", type=str,
+                        default=os.environ["SM_MODEL_DIR"])
+    parser.add_argument("--n_gpus", type=str,
+                        default=os.environ["SM_NUM_GPUS"])
 
     args = parser.parse_args()
 
@@ -289,13 +303,15 @@ if __name__ == "__main__":
         )
         inference(model, tokenizer)
 
-        sft_output_model_repo_id = f"{args.model_output_huggingface_workspace}/TwinLlama-3.1-8B"
-        save_model(model, tokenizer, "model_sft", push_to_hub=True, repo_id=sft_output_model_repo_id)
+        sft_output_model_repo_id = f"{args.model_output_huggingface_workspace}/DRA-3.1-8B"
+        save_model(model, tokenizer, "model_sft", push_to_hub=True,
+                   repo_id=sft_output_model_repo_id)
     elif args.finetuning_type == "dpo":
         print("Starting DPO training...")  # noqa
 
-        sft_base_model_repo_id = f"{args.model_output_huggingface_workspace}/TwinLlama-3.1-8B"
-        sft_base_model_repo_id = check_if_huggingface_model_exists(sft_base_model_repo_id)
+        sft_base_model_repo_id = f"{args.model_output_huggingface_workspace}/DRA-3.1-8B"
+        sft_base_model_repo_id = check_if_huggingface_model_exists(
+            sft_base_model_repo_id)
         print(f"Training from base model '{sft_base_model_repo_id}'")  # noqa
 
         output_dir_dpo = Path(args.model_dir) / "output_dpo"
@@ -311,5 +327,6 @@ if __name__ == "__main__":
         )
         inference(model, tokenizer)
 
-        dpo_output_model_repo_id = f"{args.model_output_huggingface_workspace}/TwinLlama-3.1-8B-DPO"
-        save_model(model, tokenizer, "model_dpo", push_to_hub=True, repo_id=dpo_output_model_repo_id)
+        dpo_output_model_repo_id = f"{args.model_output_huggingface_workspace}/DRA-3.1-8B-DPO"
+        save_model(model, tokenizer, "model_dpo", push_to_hub=True,
+                   repo_id=dpo_output_model_repo_id)

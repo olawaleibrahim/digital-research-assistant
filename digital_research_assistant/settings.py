@@ -19,14 +19,14 @@ class Settings(BaseSettings):
 
     # Comet ML (during training)
     COMET_API_KEY: str | None = None
-    COMET_PROJECT: str = "twin"
+    COMET_PROJECT: str = "digital_research_assistant"
 
     # --- Required settings when deploying the code. ---
     # --- Otherwise, default values values work fine. ---
 
     # MongoDB database
     DATABASE_HOST: str = "mongodb://digital_research_assistant:digital_researcch_assistant@127.0.0.1:27017"
-    DATABASE_NAME: str = "twin"
+    DATABASE_NAME: str = "digital_research_assistant"
 
     # Qdrant vector database
     USE_QDRANT_CLOUD: bool = False
@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     # --- Optional settings used to tweak the code. ---
 
     # AWS SageMaker
-    HF_MODEL_ID: str = "mlabonne/TwinLlama-3.1-8B-DPO"
+    HF_MODEL_ID: str = "olawaleibrahm/DRA-3.1-8B-DPO"
     GPU_INSTANCE_TYPE: str = "ml.g5.2xlarge"
     SM_NUM_GPUS: int = 1
     MAX_INPUT_LENGTH: int = 2048
@@ -54,8 +54,8 @@ class Settings(BaseSettings):
     GPUS: int = 1  # Number of GPUs
     CPUS: int = 2  # Number of CPU cores
 
-    SAGEMAKER_ENDPOINT_CONFIG_INFERENCE: str = "dig_res_ass"
-    SAGEMAKER_ENDPOINT_INFERENCE: str = "dig_res_ass"
+    SAGEMAKER_ENDPOINT_CONFIG_INFERENCE: str = "digital_research_assistant"
+    SAGEMAKER_ENDPOINT_INFERENCE: str = "digital_research_assistant"
     TEMPERATURE_INFERENCE: float = 0.01
     TOP_P_INFERENCE: float = 0.9
     MAX_NEW_TOKENS_INFERENCE: int = 150

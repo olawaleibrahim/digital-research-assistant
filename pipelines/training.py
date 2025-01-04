@@ -1,18 +1,18 @@
-from zenml import step
+from zenml import pipeline
 
-from digital_research_assistant.model.finetuning.sagemaker import run_finetuning_on_sagemaker
+from steps import training as training_steps
 
 
-@step
-def train(
-    finetuning_type: str,
-    num_train_epochs: int,
-    per_device_train_batch_size: int,
-    learning_rate: float,
+@pipeline
+def training(
+    finetuning_type: str = "sft",
+    num_train_epochs: int = 3,
+    per_device_train_batch_size: int = 2,
+    learning_rate: float = 3e-4,
     dataset_huggingface_workspace: str = "olawaleibrahim",
     is_dummy: bool = False,
 ) -> None:
-    run_finetuning_on_sagemaker(
+    training_steps.train(
         finetuning_type=finetuning_type,
         num_train_epochs=num_train_epochs,
         per_device_train_batch_size=per_device_train_batch_size,

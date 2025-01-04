@@ -39,14 +39,16 @@ def generate_answers(model_id: str, dataset_name: str):
 
     print(f"Generating answers for {model_id}")  # noqa
     llm = LLM(model=model_id, max_model_len=2048)
-    sampling_params = SamplingParams(temperature=0.8, top_p=0.95, min_p=0.05, max_tokens=2048)
+    sampling_params = SamplingParams(
+        temperature=0.8, top_p=0.95, min_p=0.05, max_tokens=2048)
     outputs = llm.generate(dataset["prompt"], sampling_params)
 
     answers = [output.outputs[0].text for output in outputs]
     dataset = dataset.add_column("answers", answers)
 
     print(f"Uploading results for {model_id}")  # noqa
-    dataset.push_to_hub(f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results")
+    dataset.push_to_hub(
+        f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results")
     gc.collect()
 
     return dataset
@@ -112,18 +114,21 @@ def evaluate_batch(batch, start_index):
 
 def evaluate_answers(model_id: str, num_threads: int = 10, batch_size: int = 5) -> Dataset:
     # Load the dataset
-    dataset = load_dataset(f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results", split="all")
+    dataset = load_dataset(
+        f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results", split="all")
 
     # Create batches of instruction-answer pairs with their original indices
     batches = [
-        (i, list(zip(dataset["instruction"][i : i + batch_size], dataset["answers"][i : i + batch_size], strict=False)))
+        (i, list(zip(dataset["instruction"][i: i + batch_size],
+         dataset["answers"][i: i + batch_size], strict=False)))
         for i in range(0, len(dataset), batch_size)
     ]
 
     evaluations = [None] * len(dataset)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-        futures = [executor.submit(evaluate_batch, batch, start_index) for start_index, batch in batches]
+        futures = [executor.submit(evaluate_batch, batch, start_index)
+                   for start_index, batch in batches]
 
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures)):
             for index, evaluation in future.result():
@@ -140,7 +145,8 @@ def evaluate_answers(model_id: str, num_threads: int = 10, batch_size: int = 5) 
 
     for evaluation in dataset["evaluation"]:
         try:
-            eval_dict = json.loads(evaluation) if isinstance(evaluation, str) else evaluation
+            eval_dict = json.loads(evaluation) if isinstance(
+                evaluation, str) else evaluation
             accuracy_score = eval_dict["accuracy"]["score"]
             style_score = eval_dict["style"]["score"]
 
@@ -160,7 +166,8 @@ def evaluate_answers(model_id: str, num_threads: int = 10, batch_size: int = 5) 
         dataset = dataset.remove_columns(["style"])
     dataset = dataset.add_column("style", style_scores)
 
-    dataset.push_to_hub(f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results")
+    dataset.push_to_hub(
+        f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results")
 
     return dataset
 
@@ -197,10 +204,10 @@ def check_if_huggingface_dataset_exists(dataset_id: str, default_value: str) -> 
 
 model_ids = [
     check_if_huggingface_model_exists(
-        f"{MODEL_HUGGINGFACE_WORKSPACE}/TwinLlama-3.1-8B", default_value="mlabonne/TwinLlama-3.1-8B"
+        f"{MODEL_HUGGINGFACE_WORKSPACE}/DRA-3.1-8B", default_value="mlabonne/DRA-3.1-8B"
     ),
     check_if_huggingface_model_exists(
-        f"{MODEL_HUGGINGFACE_WORKSPACE}/TwinLlama-3.1-8B-DPO", default_value="mlabonne/TwinLlama-3.1-8B-DPO"
+        f"{MODEL_HUGGINGFACE_WORKSPACE}/DRA-3.1-8B-DPO", default_value="mlabonne/DRA-3.1-8B-DPO"
     ),
     "meta-llama/Llama-3.1-8B-Instruct",
 ]
@@ -209,7 +216,7 @@ if __name__ == "__main__":
     # Run generation
     for model_id in model_ids:
         dataset_name = check_if_huggingface_dataset_exists(
-            f"{DATASET_HUGGINGFACE_WORKSPACE}/llmtwin", default_value="mlabonne/llmtwin"
+            f"{DATASET_HUGGINGFACE_WORKSPACE}/professionaldocuments", default_value="olawaleibrahim/professionaldocuments"
         )
         generate_answers(model_id, dataset_name=dataset_name)
 
@@ -219,7 +226,8 @@ if __name__ == "__main__":
 
     # Analyze results
     for model_id in model_ids:
-        dataset = load_dataset(f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results", split="all")
+        dataset = load_dataset(
+            f"{DATASET_HUGGINGFACE_WORKSPACE}/{model_id.split('/')[-1]}-results", split="all")
 
         score = sum(dataset["accuracy"]) / len(dataset["accuracy"])
         print(f"{model_id.split('/')[-1]} - Accuracy: {score:.2f}")  # noqa

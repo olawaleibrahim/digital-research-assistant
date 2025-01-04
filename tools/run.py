@@ -9,6 +9,7 @@ from pipelines import (
     export_artifact_to_json,
     extract_data_etl,
     feature_engineering,
+    training,
 )
 
 
@@ -170,6 +171,12 @@ def main(
         ), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"export_artifact_to_json_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
         export_artifact_to_json.with_options(**pipeline_args)(**run_args_etl)
+    
+    if run_training:
+        run_args_cd = {}
+        pipeline_args["config_path"] = root_dir / "configs" / "training.yaml"
+        pipeline_args["run_name"] = f"training_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
+        training.with_options(**pipeline_args)(**run_args_cd)
 
 
 if __name__ == "__main__":
