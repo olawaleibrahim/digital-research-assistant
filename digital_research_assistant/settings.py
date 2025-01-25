@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     # --- Optional settings used to tweak the code. ---
 
     # AWS SageMaker
-    HF_MODEL_ID: str = "olawaleibrahm/DRA-3.1-8B-DPO"
+    HF_MODEL_ID: str = "olawaleibrahim/DRA-3.1-8B"
     GPU_INSTANCE_TYPE: str = "ml.g5.2xlarge"
     SM_NUM_GPUS: int = 1
     MAX_INPUT_LENGTH: int = 2048
@@ -54,8 +54,8 @@ class Settings(BaseSettings):
     GPUS: int = 1  # Number of GPUs
     CPUS: int = 2  # Number of CPU cores
 
-    SAGEMAKER_ENDPOINT_CONFIG_INFERENCE: str = "digital_research_assistant"
-    SAGEMAKER_ENDPOINT_INFERENCE: str = "digital_research_assistant"
+    SAGEMAKER_ENDPOINT_CONFIG_INFERENCE: str = "DRA1"
+    SAGEMAKER_ENDPOINT_INFERENCE: str = "DRA1"
     TEMPERATURE_INFERENCE: float = 0.01
     TOP_P_INFERENCE: float = 0.9
     MAX_NEW_TOKENS_INFERENCE: int = 150

@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "~3.11"
-zenml = { version = "0.67.0", extras = ["server"] }
+zenml = { version = "0.72.0", extras = ["server"] }
 pymongo = "^4.6.2"
 click = "^8.0.1"
 loguru = "^0.7.2"
@@ -124,7 +124,7 @@ test-sagemaker-endpoint = "poetry run python -m digital_research_assistant.model
 delete-inference-endpoint = "poetry run python -m digital_research_assistant.infrastructure.aws.deploy.delete_sagemaker_endpoint"
 
 ## Docker
-build-docker-image = "docker buildx build --platform linux/amd64 -t digital_research_assistant -f Dockerfile ."
+build-docker-image = "docker buildx build --platform linux/amd64 -t dra -f Dockerfile ."
 run-docker-end-to-end-data-pipeline = "docker run --rm --network host --shm-size=2g --env-file .env digital_research_assistant poetry poe --no-cache --run-end-to-end-data"
 bash-docker-container = "docker run --rm -it --network host --env-file .env digital_research_assistant bash"
 
