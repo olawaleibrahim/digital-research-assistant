@@ -13,7 +13,6 @@ def end_to_end_data(
     dataset_id: str | None = None,
     mock: bool = False,
 ) -> None:
-    print("author names", author_names)
     wait_for_ids = []
     for author_data in author_names:
         last_step_invocation_id = extract_data_etl(

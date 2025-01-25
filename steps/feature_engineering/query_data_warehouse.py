@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 from zenml import get_step_context, step
 
 from digital_research_assistant.domain.base.nosql import NoSQLBaseDocument
-from digital_research_assistant.domain.documents import PDFDocument, WordDocument, Document, UserDocument
+from digital_research_assistant.domain.documents import Document, PDFDocument, UserDocument, WordDocument
 
 
 @step

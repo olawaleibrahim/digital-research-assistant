@@ -12,3 +12,5 @@ def feature_engineering(user_full_name: list[str], wait_for: str | list[str] | N
 
     embedded_documents = fe.chunk_and_embed(cleaned_documents)
     populate_embedded_step = fe.populate_vector_db(embedded_documents)
+
+    assert type(populate_embedded_step) == type(populate_cleaned_step)

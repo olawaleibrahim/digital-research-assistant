@@ -5,9 +5,9 @@ from uuid import UUID
 
 from digital_research_assistant.domain.chunks import Chunk, PDFChunk, WordChunk
 from digital_research_assistant.domain.cleaned_documents import (
+    CleanedDocument,
     CleanedPDFDocument,
     CleanedWordDocument,
-    CleanedDocument,
 )
 
 from .operations import chunk_article, chunk_text

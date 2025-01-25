@@ -1,7 +1,8 @@
-from loguru import logger
 import os
-from tqdm import tqdm
 from pathlib import Path
+
+from loguru import logger
+from tqdm import tqdm
 from typing_extensions import Annotated
 from zenml import get_step_context, step
 
@@ -12,7 +13,7 @@ from steps.etl import utils
 @step
 def extract_documents(user: UserDocument, user_full_name: str) -> Annotated[list[str], "extract_documents"]:
 
-    logger.info(f"Starting to append user filepaths ")
+    logger.info("Starting to append user filepaths ")
 
     ROOT_DIR = Path(__file__).resolve().parent.parent.parent
     user_dir = f"/data/input/{user_full_name}/"

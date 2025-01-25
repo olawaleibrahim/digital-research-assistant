@@ -2,11 +2,10 @@ import opik
 from langchain_openai import ChatOpenAI
 from loguru import logger
 
-from .domain.queries import Query
-from .settings import settings
-
 from .base import RAGStep
+from .domain.queries import Query
 from .prompt_templates import QueryExpansionTemplate
+from .settings import settings
 
 
 class QueryExpansion(RAGStep):

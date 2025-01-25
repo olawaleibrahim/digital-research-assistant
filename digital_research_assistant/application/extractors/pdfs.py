@@ -1,4 +1,6 @@
 import re
+from pathlib import Path
+
 import PyPDF2
 from loguru import logger
 
@@ -7,7 +9,7 @@ from digital_research_assistant.domain.documents import PDFDocument
 
 def extract_text_from_pdf(pdf_path):
     text = ""
-    with open(pdf_path, 'rb') as file:
+    with Path.open(pdf_path, 'rb') as file:
         reader = PyPDF2.PdfReader(file)
         for page in reader.pages:
             text += page.extract_text()
@@ -24,7 +26,6 @@ def clean_text(text):
 
 def extract_pdf(filepath=None):
 
-    print(f"Extracting text from {filepath}...")
     raw_text = extract_text_from_pdf(filepath)
 
     cleaned_text = clean_text(raw_text)

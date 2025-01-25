@@ -5,7 +5,7 @@ import click
 from loguru import logger
 
 from digital_research_assistant.domain.base.nosql import NoSQLBaseDocument
-from digital_research_assistant.domain.documents import PDFDocument, WordDocument, UserDocument
+from digital_research_assistant.domain.documents import PDFDocument, UserDocument, WordDocument
 
 
 @click.command()
