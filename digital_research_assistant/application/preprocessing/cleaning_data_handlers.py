@@ -7,9 +7,9 @@ from digital_research_assistant.domain.cleaned_documents import (
     CleanedWordDocument,
 )
 from digital_research_assistant.domain.documents import (
+    Document,
     PDFDocument,
     WordDocument,
-    Document,
 )
 
 from .operations import clean_text

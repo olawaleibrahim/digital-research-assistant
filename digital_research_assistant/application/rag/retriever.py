@@ -13,7 +13,6 @@ from .domain.embedded_chunks import (
     EmbeddedRepositoryChunk,
 )
 from .domain.queries import EmbeddedQuery, Query
-
 from .query_expanison import QueryExpansion
 from .reranking import Reranker
 from .self_query import SelfQuery

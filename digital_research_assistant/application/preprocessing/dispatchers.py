@@ -9,15 +9,15 @@ from .chunking_data_handlers import (
     WordChunkingHandler,
 )
 from .cleaning_data_handlers import (
-    PDFCleaningHandler,
     CleaningDataHandler,
+    PDFCleaningHandler,
     WordCleaningHandler,
 )
 from .embedding_data_handlers import (
     EmbeddingDataHandler,
     PDFEmbeddingHandler,
-    WordEmbeddingHandler,
     QueryEmbeddingHandler,
+    WordEmbeddingHandler,
 )
 
 

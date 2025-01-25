@@ -1,4 +1,4 @@
-from ..digital_research_assistant.domain.documents import PDFDocument, WordDocument, UserDocument
+from ..digital_research_assistant.domain.documents import PDFDocument, UserDocument
 
 if __name__ == "__main__":
     user = UserDocument.get_or_create(

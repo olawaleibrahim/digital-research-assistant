@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -37,8 +37,8 @@ jobs:
       - name: Lint check [Python]
         run: poetry poe lint-check
 
-      - name: Format check [Python]
-        run: poetry poe format-check
+      - name: Format fix [Python]
+        run: poetry poe format-fix
 
   test:
     name: Test

@@ -1,10 +1,9 @@
 import opik
 
 from .application.networks import CrossEncoderModelSingleton
+from .base import RAGStep
 from .domain.embedded_chunks import EmbeddedChunk
 from .domain.queries import Query
-
-from .base import RAGStep
 
 
 class Reranker(RAGStep):

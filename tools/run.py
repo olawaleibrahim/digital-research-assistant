@@ -149,7 +149,6 @@ def main(
         assert pipeline_args["config_path"].exists(
         ), f"Config file not found: {pipeline_args['config_path']}"
         pipeline_args["run_name"] = f"end_to_end_data_run_{dt.now().strftime('%Y_%m_%d_%H_%M_%S')}"
-        print("***************************************", pipeline_args)
         end_to_end_data.with_options(**pipeline_args)(**run_args_end_to_end)
 
     if run_etl:

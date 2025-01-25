@@ -1,6 +1,5 @@
-from loguru import logger
-
 from docx import Document
+from loguru import logger
 
 from digital_research_assistant.domain.documents import WordDocument
 
